@@ -12,6 +12,9 @@
             "homepage": "http://www.krajee.com/"
         }
     ],
+    "repositories": [
+        { "type": "git", "url": "https://github.com/ldar/yii2-builder" }
+    ],
     "require": {
         "kartik-v/yii2-krajee-base": "~1.7",
         "kartik-v/yii2-helpers": "~1.3",
