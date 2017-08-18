@@ -214,7 +214,7 @@ class Form extends BaseForm
         $values = array_values($this->attributes);
         $width = (int)(self::GRID_WIDTH / $cols);
         Html::addCssClass($this->rowOptions, 'row');
-        $skip = ($attrCount == 1);
+        $skip = ($attrCount == 0);
         for ($row = 1; $row <= $rows; $row++) {
             $content .= $this->beginTag('div', $this->rowOptions, $skip);
             for ($col = 1; $col <= $cols; $col++) {
