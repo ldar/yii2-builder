@@ -215,50 +215,45 @@ class Form extends BaseForm
         $width = (int)(self::GRID_WIDTH / $cols);
         Html::addCssClass($this->rowOptions, 'row');
         $skip = ($attrCount == 0);
-        //for ($row = 1; $row <= $rows; $row++) {
-        $content .= $this->beginTag('div', $this->rowOptions, $skip);
-        for ($col = 1; $col <= $attrCount; $col++) {
-            if ($index > ($attrCount - 1)) {
-                break;
-            }
-            $attribute = $names[$index];
-            $settings = $values[$index];
-            $settings = array_replace_recursive($this->attributeDefaults, $settings);
-            $colOptions = ArrayHelper::getValue($settings, 'columnOptions', $this->columnOptions);
-            if(isset($settings['width'])){
-                $colWidth=$settings['width'];
-            }else{
+        for ($row = 1; $row <= $rows; $row++) {
+            $content .= $this->beginTag('div', $this->rowOptions, $skip);
+            for ($col = 1; $col <= $cols; $col++) {
+                if ($index > ($attrCount - 1)) {
+                    break;
+                }
+                $attribute = $names[$index];
+                $settings = $values[$index];
+                $settings = array_replace_recursive($this->attributeDefaults, $settings);
+                $colOptions = ArrayHelper::getValue($settings, 'columnOptions', $this->columnOptions);
                 $colWidth = $width;
                 if (isset($colOptions['colspan'])) {
                     $colWidth = $colWidth * (int)($colOptions['colspan']);
                     unset($colOptions['colspan']);
                 }
+                $colWidth = (int)$colWidth;
+                Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $colWidth);
+                $content .= "\t" . $this->beginTag('div', $colOptions, $skip) . "\n";
+                if (!empty($settings['attributes'])) {
+                    $this->raise(self::EVENT_BEFORE_RENDER_SUB_ATTR, $attribute, $index, ['settings' => &$settings]);
+                    $content .= $this->renderSubAttributes($settings, $index);
+                    $this->raise(self::EVENT_AFTER_RENDER_SUB_ATTR, $attribute, $index, ['content' => &$content]);
+                } else {
+                    $this->raise(self::EVENT_BEFORE_PARSE_INPUT, $attribute, $index, ['settings' => &$settings]);
+                    $content .= "\t\t" . $this->parseInput($attribute, $settings, $index) . "\n";
+                    $this->raise(self::EVENT_AFTER_PARSE_INPUT, $attribute, $index, ['content' => &$content]);
+                }
+                $content .= "\t" . $this->endTag('div', $skip) . "\n";
+                $index++;
             }
-
-            $colWidth = (int)$colWidth;
-            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $colWidth);
-            $content .= "\t" . $this->beginTag('div', $colOptions, $skip) . "\n";
-            if (!empty($settings['attributes'])) {
-                $this->raise(self::EVENT_BEFORE_RENDER_SUB_ATTR, $attribute, $index, ['settings' => &$settings]);
-                $content .= $this->renderSubAttributes($settings, $index);
-                $this->raise(self::EVENT_AFTER_RENDER_SUB_ATTR, $attribute, $index, ['content' => &$content]);
-            } else {
-                $this->raise(self::EVENT_BEFORE_PARSE_INPUT, $attribute, $index, ['settings' => &$settings]);
-                $content .= "\t\t" . $this->parseInput($attribute, $settings, $index) . "\n";
-                $this->raise(self::EVENT_AFTER_PARSE_INPUT, $attribute, $index, ['content' => &$content]);
-            }
-            $content .= "\t" . $this->endTag('div', $skip) . "\n";
-            $index++;
+            $content .= $this->endTag('div', $skip) . "\n";
         }
-        $content .= $this->endTag('div', $skip) . "\n";
-        //}
         return $content;
     }
 
     /**
      * Render sub attributes.
      *
-     * @param array $settings the attribute settings
+     * @param array  $settings the attribute settings
      * @param string $index the zero-based index of the attribute
      *
      * @return string
@@ -275,9 +270,9 @@ class Form extends BaseForm
         }
         if ($this->_orientation !== ActiveForm::TYPE_HORIZONTAL) {
             return '<div class="kv-nested-attribute-block">' . "\n" .
-                Html::label($label, null, $labelOptions) . "\n" .
-                $content . "\n" .
-                '</div>';
+            Html::label($label, null, $labelOptions) . "\n" .
+            $content . "\n" .
+            '</div>';
         }
         $defaultLabelSpan = ArrayHelper::getValue($this->form->formConfig, 'labelSpan', 3);
         $labelSpan = ArrayHelper::getValue($settings, 'labelSpan', $defaultLabelSpan);
@@ -286,19 +281,19 @@ class Form extends BaseForm
         $rowOptions = ['class' => 'kv-nested-attribute-block form-sub-attributes form-group'];
         $inputOptions = ['class' => "col-{$this->columnSize}-{$inputSpan}"];
         return Html::beginTag('div', $rowOptions) . "\n" .
-            Html::beginTag('label', $labelOptions) . "\n" .
-            $label . "\n" .
-            Html::endTag('label') . "\n" .
-            Html::beginTag('div', $inputOptions) . "\n" .
-            $content . "\n" .
-            Html::endTag('div') . "\n" .
-            Html::endTag('div') . "\n";
+        Html::beginTag('label', $labelOptions) . "\n" .
+        $label . "\n" .
+        Html::endTag('label') . "\n" .
+        Html::beginTag('div', $inputOptions) . "\n" .
+        $content . "\n" .
+        Html::endTag('div') . "\n" .
+        Html::endTag('div') . "\n";
     }
 
     /**
      * Gets sub attribute markup content.
      *
-     * @param array $settings the attribute settings
+     * @param array  $settings the attribute settings
      * @param string $index the zero-based index of the attribute
      *
      * @return string
