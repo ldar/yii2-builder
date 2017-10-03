@@ -25,10 +25,5 @@
         "psr-4": {
             "kartik\\builder\\": ""
         }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.7"
-        }
     }
 }
