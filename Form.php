@@ -236,7 +236,7 @@ class Form extends BaseForm
             }
 
             $colWidth = (int)$colWidth;
-            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $settings['offset']);
+            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $colWidth);
             if(isset($settings['offset'])){
                 Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-' . $settings['offset']);
             }
