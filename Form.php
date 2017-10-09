@@ -236,9 +236,11 @@ class Form extends BaseForm
             }
 
             $colWidth = (int)$colWidth;
-            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $colWidth);
+            Html::addCssClass($colOptions, 'input_edit  form-group col-xs-12 col-' . $this->columnSize . '-' . $colWidth);
             if(isset($settings['offset'])){
                 Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-' . $settings['offset']);
+            }else{
+                Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-0');
             }
             $content .= "\t" . $this->beginTag('div', $colOptions, $skip) . "\n";
             if (!empty($settings['attributes'])) {
