@@ -236,7 +236,10 @@ class Form extends BaseForm
             }
 
             $colWidth = (int)$colWidth;
-            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $colWidth);
+            Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $settings['offset']);
+            if(isset($settings['offset'])){
+                Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-' . $colWidth);
+            }
             $content .= "\t" . $this->beginTag('div', $colOptions, $skip) . "\n";
             if (!empty($settings['attributes'])) {
                 $this->raise(self::EVENT_BEFORE_RENDER_SUB_ATTR, $attribute, $index, ['settings' => &$settings]);
