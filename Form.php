@@ -238,7 +238,7 @@ class Form extends BaseForm
             $colWidth = (int)$colWidth;
             Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-' . $settings['offset']);
             if(isset($settings['offset'])){
-                Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-' . $colWidth);
+                Html::addCssClass($colOptions, 'col-' . $this->columnSize . '-offset-' . $settings['offset']);
             }
             $content .= "\t" . $this->beginTag('div', $colOptions, $skip) . "\n";
             if (!empty($settings['attributes'])) {
